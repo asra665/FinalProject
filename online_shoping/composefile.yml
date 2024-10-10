@@ -1,0 +1,39 @@
+services:
+#This is the php container
+  web:
+    image: php:7.4-apache
+    container_name: php_container
+    ports:
+      - "8085:80"
+    volumes:
+      - "C:/Users/All Users/Jenkins/.jenkins/workspace/Final_Project/:/var/www/html/"
+      - mysql_data:/var/lib/mysql
+
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: nasir
+      MYSQL_PASSWORD: hello@123
+      MYSQL_DATABASE: myhmsdb
+    command: /bin/sh -c "docker-php-ext-install mysqli && apache2-foreground"
+
+
+#This is the databse container
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    #restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: hello@123
+      MYSQL_DATABASE: myhmsdb
+      MYSQL_USER: nasir
+      MYSQL_PASSWORD: hello@123
+    volumes:
+      - "C:/xampp/htdocs/Project/Hospital-Management-System/database/:/docker-entrypoint-initdb.d"
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:
